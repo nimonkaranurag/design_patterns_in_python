@@ -5,7 +5,7 @@ class SingletonMeta(type):
     def __call__(cls):
 
         if cls not in cls._instances:
-            cls._instances[cls] = super().__call__()
+            cls._instances[cls] = super().__call__(cls)
         
         return cls._instances[cls]
     
