@@ -32,3 +32,5 @@ def __call__(cls,*args,**kwargs):
 ## Singleton Design Pattern
 
 - This is an **creational** design pattern dealing with how class objects are created.
+- There are many ways to architecturally implement a Singleton design, however: the most efficient way to do so is by using a thread-safe metaclass implementation.
+
