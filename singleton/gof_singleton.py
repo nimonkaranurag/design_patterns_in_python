@@ -1,6 +1,6 @@
 class GangOfFour_Singleton:
     
-    _instance = {}
+    _instance = None
 
     def __init__(self):
         raise RuntimeError("Use the `get_instance` method for initializing instances.")
