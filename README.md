@@ -30,3 +30,5 @@ def __call__(cls,*args,**kwargs):
 
 
 ## Singleton Design Pattern
+
+- This is an **creational** design pattern dealing with how class objects are created.
