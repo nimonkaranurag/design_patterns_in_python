@@ -20,5 +20,7 @@ def main():
 
     assert obj_1 is obj_2
 
+    print("success")
+
 if __name__ == "__main__":
     main()
