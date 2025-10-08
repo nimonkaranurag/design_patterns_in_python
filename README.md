@@ -72,6 +72,9 @@ print(Child.__mro__)
   - The root of ANY Python class' hierarchy is `object`.
   - Every Python class inherits from it.
 
+- The MRO applies to both methods and class variables.
+  - If Python does not hit a method or variable in the immediately next class object in the MRO, it searches the next one in the hierarchy till it is found.
+
 
 ## Singleton Design Pattern
 
