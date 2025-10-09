@@ -1,6 +1,6 @@
 # Python Notes
 
-### Class Objects 
+## Class Objects 
 
 - Python doesn’t have a single Java-style constructor. Instead it splits responsibilities into:
 `__new__` = creation (the true constructor; returns the new object)
@@ -35,7 +35,7 @@ def __call__(cls,*args,**kwargs):
   - `class.__call__` -> the full pipeline of class object creation + initialization.
 
 
-### The `super()` keyword
+## The `super()` keyword
 
 - The `super()` keyword returns a *proxy object* which *delegates method calls* to the next class in the **MRO(method resolution order)**.
 - Python maintains an *ordered `tuple` of class objects* representing the "MRO" which the interpreter searches when it is looking for an executor of a method/function.
@@ -215,4 +215,33 @@ print(Child.__mro__)
   - It is a **structural pattern**.
   - Essentially we define a "wrapper" on the adaptee/incompatible object. So, you no longer nead to modify the internals of two incompatible interfaces.
 
+## Strategy Pattern
 
+- **Suppose:** You are designing a web scraper which should be agnostic to the data format it is scraping, that is, it should be able to scrape: JSON, XML, CSV - all popular data formats.
+  - If you expand a single `Scraper` to accommodate all these formats using a switch case then: it will be difficult to maintain and will make this class over-bloated.
+  - It will also violate the **Open/Closed principle** (open for extension and closed for modification) in case of future data sources that the `Scraper` should accommodate.
+  - One other solution is: migrate all the extraction logic for each data type to a separate class and have the `Scraper` use their implementations as needed.
+    - You could define a common `Handler` interface.
+    - Each data type: CSV, XML, JSON, etc. will have a concrete implementation of the `Handler`.
+    - The `Scraper` will use the corresponding concrete implementation when it encounters the respective type (e.g., a `JSONHandler` for JSON, an `SQLHandler` for SQL, etc.).
+    - In this way, the exact implementation for extracting each data type is abstracted from the `Scraper`.
+
+- The **Strategy pattern** is exactly this: "extract related algorithms into separate classes and define a common interface for them".
+- **When to apply this approach?**
+  - Your class <ins>has branching statements for different variants of the same algorithm</ins> (in the above scenario: the "data extraction algorithm").
+  - You want to isolate the business logic of the class from implementations.
+  - Use it within an object when you want the ability to <ins>switch between algorithms at runtime</ins> (it is not elegant if you have a big block of `if-else` statements, toggling variants of the algorithm).
+- This is an example of a **behavioural design pattern**.
+
+## Observer Pattern
+
+- This is a **behavioural design pattern.**
+- A simple publisher/subscriber model (or, "subject"/"observer(s)" model) where the publisher/"subject" notifies all subscribers/"observers" of any changes in its state.
+
+## State Pattern
+
+- An object has a <ins>finite number</ins> of "states".
+- Each state is accompanied by a finite number of "actions" that can be performed on the object in that state.
+- Each action results in a change in the object's state. So, performing an action causes a "transition" from one state to another.
+- The "behaviour" of an object in any state encapsulates the "actions" it can perform in that state (these terms are used interchangeably in this context).
+- The **state pattern** is a **behavioural design pattern** which allows an object to alter its behaviour *when its internal state changes* (when it transitions from one state to another because of some action).
