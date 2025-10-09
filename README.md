@@ -130,3 +130,63 @@ print(Child.__mro__)
 - There are many ways to architecturally implement a Singleton design, however: the most efficient way to do so is by using a thread-safe metaclass implementation.
 
 
+## Factory Method Pattern
+
+- Suppose you have a collection of bullets you ship with your game:
+  ```python
+  fast_bullet = FastBullet()
+  slow_bullet = SlowBullet()
+  splash_bullet = SplashBullet()
+  ```
+  - Now, a customer request comes in for you to add a new bullet to the game, given the current design - the only way to do so would be:
+    ```python
+    (...)
+    splash_bullet = SplashBullet()
+    xxxx_bullet = xxxxBullet() # a new type of bullet
+    ```
+  - The obvious problem with this design is:
+    - your code is *too aware* of the bullet types and is tightly coupled to it.
+    - the solution is implementing a **Factory Method Pattern**.
+
+- This is also a **creational** design pattern which abstracts the instance creation logic from the client.
+- It provides a mechanism to create instances without exposing the actual logic.
+- **Objects are created by calling a factory method instead of a constructor.**
+
+## Builder Design Pattern
+
+- Another **creational** design pattern, it encapsulates the logic for building complex objects; making it reusable.
+- **What is a "complex object"?**
+  - An object which has many distinct "parts" is called complex.
+  - There exists well defined relationships between these parts.
+
+- The principles behind this pattern are:
+  - isolate/decouple the construction of a "complex" object.
+  - design the construction process in a manner that enables creation of different representations of that object.
+
+- Consider the following scenario: *You want to build a house for a video game.*
+  - The house will have several different "parts"/components: a swimming pool, windows, roof, etc.
+  - One option is to define a single class `House` which offers a constructor to set configurations for all of these parts:
+    ```python
+    my_house = House(
+      walls = {
+        "count": 2,
+        "colour": "bold cyan",
+      },
+      (...)
+    )
+    # this is unreadable and difficult to maintain.
+    # the crux of the problem is: `House` has the responsibility of creating itself through its constructor.
+    ```
+    - We want to decouple the creation of a new `House` instance from the `House` type itself -> provide an abstract respresentation of the **creation process**.
+    - We do not want to let the object create itself.
+  - Enter: **the builder pattern**!
+    - a **builder** is an object that constructs other objects.
+    - it assembles object "parts" to yield a final object representation.
+    - For example, you can break down construction of `my_house` into a series of method calls:
+      ```pseudo
+      Step 1: build_walls()
+      Step 2: build_pool()
+      (...)
+      ```
+      - Now, you can "build" the `House` by calling *only the methods that you need*, getting a specific configuration of `House`.
+      - `my_house_1` for example, could choose to have a pool, then it would call: `build_pool()` at some step. However, `my_house_2` may choose to build a `House` without a pool and it would simply skip the call to `build_pool()`.
