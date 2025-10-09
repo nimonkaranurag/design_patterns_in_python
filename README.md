@@ -190,3 +190,27 @@ print(Child.__mro__)
       ```
       - Now, you can "build" the `House` by calling *only the methods that you need*, getting a specific configuration of `House`.
       - `my_house_1` for example, could choose to have a pool, then it would call: `build_pool()` at some step. However, `my_house_2` may choose to build a `House` without a pool and it would simply skip the call to `build_pool()`.
+
+## Adapter Design Pattern
+
+- **Suppose the following situation:** you have a system component which generates data in an XML format which needs to be consumed by some other component; however, the second component only accepts serialized JSON => these formats are incompatible with each other!
+  - One possible solution is rewriting one of the two components to enable data compatibility. However, this is not maintainable and violates the SOLID principles.
+- **Scenario 2:** Suppose you have migrated a class `Rectangle`:
+  *from*
+    ```python
+    Rectangle(x,y,width,height)
+    ```
+  *to*
+    ```python
+    Rectangle(x1,y1,x2,y2)
+    ```
+  - For backwards compatibility with legacy code an unelegant solution would be to re-write all of it so that it is compatible with the new constructor for `Rectangle`.
+
+- To address these incompatibilities, we can use the **adapter design pattern!**
+  - It is a design pattern used to **convert the interface contract of one class to be compatible with another class' interface contract.**
+  - An **adapter** can convert source data into a format the client can understand.
+    - In the first scenario, the adapter would convert XML -> JSON for consumption by the second component (the **adaptee**). This would be a *data adapter*.
+    - In the second scenario, the adapter would similarly translate the new constructor interface for compatibility with legacy code. This would be an *interface adapter*.
+  - An adapter thus enables two classes to work together which otherwise could not have because of differences in their expectations (incompatible interfaces).
+
+
