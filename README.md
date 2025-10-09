@@ -212,5 +212,7 @@ print(Child.__mro__)
     - In the first scenario, the adapter would convert XML -> JSON for consumption by the second component (the **adaptee**). This would be a *data adapter*.
     - In the second scenario, the adapter would similarly translate the new constructor interface for compatibility with legacy code. This would be an *interface adapter*.
   - An adapter thus enables two classes to work together which otherwise could not have because of differences in their expectations (incompatible interfaces).
+  - It is a **structural pattern**.
+  - Essentially we define a "wrapper" on the adaptee/incompatible object. So, you no longer nead to modify the internals of two incompatible interfaces.
 
 
