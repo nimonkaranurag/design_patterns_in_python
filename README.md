@@ -38,7 +38,7 @@ def __call__(cls,*args,**kwargs):
 ### The `super()` keyword
 
 - The `super()` keyword returns a *proxy object* which *delegates method calls* to the next class in the **MRO(method resolution order)**.
-- Python maintains an *ordered list of class objects* representing the "MRO" which the interpreter searches when it is looking for an executor of a method/function.
+- Python maintains an *ordered `tuple` of class objects* representing the "MRO" which the interpreter searches when it is looking for an executor of a method/function.
 - For example:
 ```python
 class Grandfather:
@@ -63,18 +63,66 @@ print(Child.__mro__)
   - a valid interpretation of this is:
     - The Python interpreter first looks at the *second argument* passed using `super(...,Y)` and says: "okay, I need to use this object's MRO".
     - **Then**, the Python interpreter applies the "constraint" offered by the *first argument* to `super(X,...)` and says: "okay, now let me skip `X` and everything before it in the MRO of `Y`".
-  - Another important note is that both `X` and `Y` <ins>must be class objects</ins> of type `type`.
+  - Another important note is `X` <ins>must be a class object</ins> of type `type`. `Y` can be: 
+    - either `X` itself or a sub-class of `X` OR
+    - an instance of `X` (or an instance of a sub-class of `X`).
+    the idea is: `X` must appear in:
+      - `Y.__mro__` if `Y` is a sub-class of `X`
+      - `type(Y).__mro__` if `Y` is an instance of `X` or one of `X`'s subclasses.
+  - Instances do not have MROs.
+    For example:
+      ```python
+      class Dog:
+        pass
+
+      dog1=Dog()
+      dog2=Dog()
+      # doesn't make sense for dog1's MRO to be different from dog2's MRO.
+      # instances do not have MROs -> it is a class object attribute.
+      
+      assert type(dog1).__mro__ == dog2.__class__.__mro__ # two ways of accessing an instance's MRO!
+      assert type(dog1).__mro__ == Dog.__mro__ # Dog is a class and has an MRO
+      ```
+  - Instances and classes are different.
+
+    For example:
+      ```python
+      class Animal:
+        pass
+
+      class Dog(Animal):
+        pass
+
+      dog = Dog()
+
+      # these are instances
+      assert isinstance(dog, Dog) # True
+      assert isinstance(dog, Animal) # True
+
+      # these are classes
+      assert isinstance(Dog, type) # True
+      assert not isinstance(Dog, Animal) # True
+
+      # the MRO is strictly an inheritance chain
+      assert issubclass(Dog, Animal) # True
+      assert type(Dog) is type # True
+
+      dog.__class__.__mro__ # this the Dog's MRO
+      Dog.__class__.__mro__ # this is type's MRO
+      ```
 
 - In any class' MRO, the last item is **always:**
-```
-<class 'object'>
-```
+  ```python
+  <class 'object'>
+  ```
   - The root of ANY Python class' hierarchy is `object`.
   - Every Python class inherits from it.
 
 - The MRO applies to both methods and class variables.
   - If Python does not hit a method or variable in the immediately next class object in the MRO, it searches the next one in the hierarchy till it is found.
 
+- The MRO **is strictly an inheritance chain**, NOT an instantiation chain.
+  - Metaclasses define rules for *instantiating* class objects. This is decoupled from inheritance.
 
 ## Singleton Design Pattern
 
